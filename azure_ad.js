@@ -19,7 +19,7 @@ if (Meteor.isClient) {
     var fieldsForOtherUsers = _.map(
         // even with autopublish, no legitimate web app should be
         // publishing all users' emails
-        _.without(AzureAd.whitelistedFields, 'mail', 'userPrincipleName'),
+        _.without(AzureAd.whitelistedFields, 'mail', 'userPrincipalName'),
         function (subfield) { return 'services.azureAd.' + subfield; }
     );
 
