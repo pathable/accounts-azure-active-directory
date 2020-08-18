@@ -1,30 +1,34 @@
 Accounts.oauth.registerService('azureAd');
 
 if (Meteor.isClient) {
-    Meteor.loginWithAzureAd = function(options, callback) {
-        // support a callback without options
-        if (! callback && typeof options === "function") {
-            callback = options;
-            options = null;
-        }
+  Meteor.loginWithAzureAd = (options, callback) => {
+    // support a callback without options
+    let _callback;
+    let _options;
 
-        var credentialRequestCompleteCallback = Accounts.oauth.credentialRequestCompleteHandler(callback);
-        AzureAd.requestCredential(options, credentialRequestCompleteCallback);
-    };
+    if (!callback && typeof options === 'function') {
+      _callback = options;
+      _options = null;
+    }
+
+    // eslint-disable-next-line max-len
+    const credentialRequestCompleteCallback = Accounts.oauth.credentialRequestCompleteHandler(
+      _callback
+    );
+    AzureAd.requestCredential(_options, credentialRequestCompleteCallback);
+  };
 } else {
-    var fieldsForLoggedInusers = _.map(
-        AzureAd.whitelistedFields.concat(['accessToken', 'expiresAt']), // don't publish refresh token
-        function (subfield) { return 'services.azureAd.' + subfield; }
-    );
-    var fieldsForOtherUsers = _.map(
-        // even with autopublish, no legitimate web app should be
-        // publishing all users' emails
-        _.without(AzureAd.whitelistedFields, 'mail', 'userPrincipalName'),
-        function (subfield) { return 'services.azureAd.' + subfield; }
-    );
+  const fieldsForLoggedInusers = AzureAd.allowlistFields
+    .concat(['accessToken', 'expiresAt'])
+    .map(subfield => `services.azureAd.${subfield}`);
+  const fieldsForOtherUsers = AzureAd.allowlistFields
+    .filter(
+      allowlistField => !['mail', 'userPrincipalName'].includes(allowlistField)
+    )
+    .map(subfield => `services.azureAd.${subfield}`);
 
-    Accounts.addAutopublishFields({
-        forLoggedInUser: fieldsForLoggedInusers,
-        forOtherUsers: fieldsForOtherUsers
-    });
+  Accounts.addAutopublishFields({
+    forLoggedInUser: fieldsForLoggedInusers,
+    forOtherUsers: fieldsForOtherUsers,
+  });
 }
