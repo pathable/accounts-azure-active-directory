@@ -8,7 +8,7 @@ This package was written to allow the development of  meteor apps for the (windo
 Essentially it's Active Directory in the cloud. You can ask your Ops/Systems team to create a mirror image of your enterprise installation or sign up for a free account and add your users manually.
 
 ### Configuration
-Please refer to the [wiki documentation](https://github.com/djluck/accounts-azure-active-directory/wiki/Getting-accounts-azure-active-directory-up-and-running) for a guide to configuring this package.
+Please refer to the [wiki documentation](https://github.com/Sornii/accounts-azure-active-directory/wiki/Getting-accounts-azure-active-directory-up-and-running) for a guide to configuring this package.
 
 ### Adding email addresses to accounts
 When a user authenticates for the first time using the azure-active-directory flow, their email address is captured and passed to the Accounts.onCreateUser(). By adding the following code to your application, you can store the email addresses of each user:
@@ -24,3 +24,15 @@ When a user authenticates for the first time using the azure-active-directory fl
 
       return user;
     });
+
+### Setting Service Configuration
+
+```
+db.meteor_accounts_loginServiceConfiguration.insert({
+    "_id": "Jjwjg6gouWLXhMGKW",
+    "service": "azureAd",
+    "clientId": "client_id",
+    "secret": "secret_key",
+    "tennantId": "tenant_id",
+})
+```
