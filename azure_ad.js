@@ -1,22 +1,21 @@
 Accounts.oauth.registerService('azureAd');
 
 if (Meteor.isClient) {
-  Meteor.loginWithAzureAd = (options, callback) => {
-    // support a callback without options
-    let _callback;
-    let _options;
-
-    if (!callback && typeof options === 'function') {
-      _callback = options;
-      _options = null;
-    }
+  const loginWithAzureAd = (...args) => {
+    // support both (options, callback) and (callback).
+    const isFirstArgFunction = typeof args[0] === 'function';
+    const options = isFirstArgFunction ? {} : args[0] || {};
+    const callback = isFirstArgFunction ? args[0] : args[1];
 
     // eslint-disable-next-line max-len
     const credentialRequestCompleteCallback = Accounts.oauth.credentialRequestCompleteHandler(
-      _callback
+      callback
     );
-    AzureAd.requestCredential(_options, credentialRequestCompleteCallback);
+    AzureAd.requestCredential(options, credentialRequestCompleteCallback);
   };
+  Accounts.registerClientLoginFunction('azureAd', loginWithAzureAd);
+  Meteor.loginWithAzureAd = (...args) =>
+    Accounts.applyLoginFunction('azureAd', args);
 } else {
   const fieldsForLoggedInusers = AzureAd.allowlistFields
     .concat(['accessToken', 'expiresAt'])

@@ -33,6 +33,9 @@ db.meteor_accounts_loginServiceConfiguration.insert({
     "service": "azureAd",
     "clientId": "client_id",
     "secret": "secret_key",
-    "tennantId": "tenant_id",
+    "tenantId": "tenant_id",
+    // MUST be "popup" - currently Azure AD does not allow for url parameters in redirect URI's. If a null popup style is assigned, then
+    // the url parameter "close" is appended and authentication will fail.
+    "loginStyle": "popup",
 })
 ```
