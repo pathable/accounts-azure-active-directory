@@ -1,16 +1,18 @@
 Package.describe({
   summary: 'Login service for Azure Active Directory',
-  version: '1.2.0-beta.1',
-  name: 'sornii:accounts-azure-active-directory',
-  git: 'https://github.com/Sornii/accounts-azure-active-directory',
+  version: '1.3.1',
+  name: 'pathable:accounts-azure-active-directory',
+  git: 'https://github.com/pathable/accounts-azure-active-directory',
 });
 
 Package.onUse(api => {
-  api.use('accounts-base@1.4.2', ['client', 'server']);
+  api.versionsFrom('1.11');
+
+  api.use('accounts-base', ['client', 'server']);
   // Export Accounts (etc) to packages using this one.
   api.imply('accounts-base', ['client', 'server']);
-  api.use('accounts-oauth@1.1.15', ['client', 'server']);
-  api.use('sornii:azure-active-directory@1.2.0-beta.1', ['client', 'server']);
+  api.use('accounts-oauth', ['client', 'server']);
+  api.use('pathable:azure-active-directory@1.3.1', ['client', 'server']);
 
   api.addFiles('azure_ad_login_buttons.css', 'client');
 
