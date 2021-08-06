@@ -6,7 +6,7 @@ Package.describe({
 });
 
 Package.onUse(api => {
-  api.versionsFrom('2.3.4');
+  api.versionsFrom('2.3');
 
   api.use('accounts-base', ['client', 'server']);
   // Export Accounts (etc) to packages using this one.
